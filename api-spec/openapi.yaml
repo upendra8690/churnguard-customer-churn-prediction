@@ -1,0 +1,323 @@
+openapi: 3.1.0
+info:
+  # Do not change the title, if the title changes, the import paths will be broken
+  title: Api
+  version: 0.1.0
+  description: ChurnGuard API specification
+servers:
+  - url: /api
+    description: Base API path
+tags:
+  - name: health
+    description: Health operations
+  - name: churn
+    description: Churn analytics
+paths:
+  /healthz:
+    get:
+      operationId: healthCheck
+      tags: [health]
+      summary: Health check
+      description: Returns server health status
+      responses:
+        "200":
+          description: Healthy
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HealthStatus"
+
+  /churn/summary:
+    get:
+      operationId: getChurnSummary
+      tags: [churn]
+      summary: High-level KPI summary
+      responses:
+        "200":
+          description: Summary KPIs
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ChurnSummary"
+
+  /churn/by-contract:
+    get:
+      operationId: getChurnByContract
+      tags: [churn]
+      summary: Churn rate grouped by contract type
+      responses:
+        "200":
+          description: Churn by contract
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ChurnByGroup"
+
+  /churn/by-internet:
+    get:
+      operationId: getChurnByInternet
+      tags: [churn]
+      summary: Churn rate grouped by internet service type
+      responses:
+        "200":
+          description: Churn by internet service
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ChurnByGroup"
+
+  /churn/by-payment:
+    get:
+      operationId: getChurnByPayment
+      tags: [churn]
+      summary: Churn rate grouped by payment method
+      responses:
+        "200":
+          description: Churn by payment method
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ChurnByGroup"
+
+  /churn/tenure-distribution:
+    get:
+      operationId: getChurnTenureDistribution
+      tags: [churn]
+      summary: Churn vs retention counts bucketed by tenure range
+      responses:
+        "200":
+          description: Tenure distribution
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/TenureBucket"
+
+  /churn/monthly-charges:
+    get:
+      operationId: getChurnMonthlyCharges
+      tags: [churn]
+      summary: Average monthly charges comparison churned vs retained
+      responses:
+        "200":
+          description: Monthly charges stats
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ChargesComparison"
+
+  /churn/customers:
+    get:
+      operationId: getChurnCustomers
+      tags: [churn]
+      summary: Full customer list with churn flag and risk score
+      responses:
+        "200":
+          description: Customer list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/CustomerRecord"
+
+  /churn/predict:
+    post:
+      operationId: predictChurn
+      tags: [churn]
+      summary: Predict churn probability for a new customer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ChurnPredictionInput"
+      responses:
+        "200":
+          description: Prediction result
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ChurnPredictionResult"
+
+components:
+  schemas:
+    HealthStatus:
+      type: object
+      properties:
+        status:
+          type: string
+      required:
+        - status
+
+    ChurnSummary:
+      type: object
+      required:
+        - totalCustomers
+        - churnedCustomers
+        - retainedCustomers
+        - churnRate
+        - avgMonthlyChargesChurned
+        - avgMonthlyChargesRetained
+        - avgTenureChurned
+        - avgTenureRetained
+        - seniorChurnRate
+      properties:
+        totalCustomers:
+          type: integer
+        churnedCustomers:
+          type: integer
+        retainedCustomers:
+          type: integer
+        churnRate:
+          type: number
+        avgMonthlyChargesChurned:
+          type: number
+        avgMonthlyChargesRetained:
+          type: number
+        avgTenureChurned:
+          type: number
+        avgTenureRetained:
+          type: number
+        seniorChurnRate:
+          type: number
+
+    ChurnByGroup:
+      type: object
+      required:
+        - group
+        - total
+        - churned
+        - retained
+        - churnRate
+      properties:
+        group:
+          type: string
+        total:
+          type: integer
+        churned:
+          type: integer
+        retained:
+          type: integer
+        churnRate:
+          type: number
+
+    TenureBucket:
+      type: object
+      required:
+        - bucket
+        - churned
+        - retained
+      properties:
+        bucket:
+          type: string
+        churned:
+          type: integer
+        retained:
+          type: integer
+
+    ChargesComparison:
+      type: object
+      required:
+        - churned
+        - retained
+        - buckets
+      properties:
+        churned:
+          type: number
+        retained:
+          type: number
+        buckets:
+          type: array
+          items:
+            $ref: "#/components/schemas/ChargesBucket"
+
+    ChargesBucket:
+      type: object
+      required:
+        - range
+        - churned
+        - retained
+      properties:
+        range:
+          type: string
+        churned:
+          type: integer
+        retained:
+          type: integer
+
+    CustomerRecord:
+      type: object
+      required:
+        - customerId
+        - gender
+        - seniorCitizen
+        - tenure
+        - internetService
+        - contract
+        - monthlyCharges
+        - totalCharges
+        - churn
+        - churnScore
+      properties:
+        customerId:
+          type: string
+        gender:
+          type: string
+        seniorCitizen:
+          type: integer
+        tenure:
+          type: number
+        internetService:
+          type: string
+        contract:
+          type: string
+        monthlyCharges:
+          type: number
+        totalCharges:
+          type: number
+        churn:
+          type: string
+        churnScore:
+          type: number
+
+    ChurnPredictionInput:
+      type: object
+      required:
+        - tenure
+        - monthlyCharges
+        - totalCharges
+        - seniorCitizen
+        - contract
+      properties:
+        tenure:
+          type: number
+        monthlyCharges:
+          type: number
+        totalCharges:
+          type: number
+        seniorCitizen:
+          type: integer
+        contract:
+          type: integer
+
+    ChurnPredictionResult:
+      type: object
+      required:
+        - prediction
+        - churnProbability
+        - label
+      properties:
+        prediction:
+          type: integer
+        churnProbability:
+          type: number
+        label:
+          type: string
