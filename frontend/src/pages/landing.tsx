@@ -1,30 +1,18 @@
 import { useState, useEffect, useRef } from "react";
 
 const LOGOS = [
-  { display: "Google",          style: { fontSize: 22, fontWeight: 700, fontFamily: "Arial,sans-serif", letterSpacing: "-0.01em" } },
-  { display: "Anthropic",       style: { fontSize: 15, fontWeight: 800, fontFamily: "Arial,sans-serif", letterSpacing: "0.1em" } },
-  { display: "OpenAI",          style: { fontSize: 22, fontWeight: 700, fontFamily: "Arial,sans-serif" } },
-  { display: "Microsoft",       style: { fontSize: 20, fontWeight: 600, fontFamily: "Arial,sans-serif" } },
-  { display: "Stripe",          style: { fontSize: 24, fontWeight: 800, fontFamily: "Arial Black,sans-serif" } },
-  { display: "Notion",          style: { fontSize: 22, fontWeight: 700, fontFamily: "Georgia,serif" } },
-  { display: "Brex",            style: { fontSize: 24, fontWeight: 900, fontFamily: "Arial Black,sans-serif" } },
-  { display: "Salesforce",      style: { fontSize: 18, fontWeight: 700, fontFamily: "Arial,sans-serif" } },
-  { display: "HubSpot",         style: { fontSize: 20, fontWeight: 700, fontFamily: "Arial,sans-serif" } },
-  { display: "Intercom",        style: { fontSize: 20, fontWeight: 700, fontFamily: "Arial,sans-serif" } },
-  { display: "Fivetran",        style: { fontSize: 21, fontWeight: 600, fontFamily: "Arial,sans-serif" } },
-  { display: "Algolia",         style: { fontSize: 21, fontWeight: 700, fontFamily: "Arial,sans-serif" } },
-  { display: "ClickUp",         style: { fontSize: 21, fontWeight: 700, fontFamily: "Arial,sans-serif" } },
-  { display: "Loom",            style: { fontSize: 23, fontWeight: 700, fontFamily: "Arial,sans-serif" } },
-  { display: "Hightouch",       style: { fontSize: 20, fontWeight: 700, fontFamily: "Arial,sans-serif" } },
-  { display: "Segment",         style: { fontSize: 21, fontWeight: 700, fontFamily: "Arial,sans-serif" } },
-  { display: "Mixpanel",        style: { fontSize: 20, fontWeight: 700, fontFamily: "Arial,sans-serif" } },
-  { display: "Amplitude",       style: { fontSize: 19, fontWeight: 700, fontFamily: "Arial,sans-serif" } },
-  { display: "Zendesk",         style: { fontSize: 21, fontWeight: 700, fontFamily: "Arial,sans-serif" } },
-  { display: "Twilio",          style: { fontSize: 22, fontWeight: 700, fontFamily: "Arial,sans-serif" } },
-  { display: "Reddit",          style: { fontSize: 22, fontWeight: 800, fontFamily: "Arial,sans-serif" } },
-  { display: "Hinge",           style: { fontSize: 24, fontWeight: 700, fontFamily: "Georgia,serif", fontStyle: "italic" } },
-  { display: "Ramp",            style: { fontSize: 23, fontWeight: 700, fontFamily: "Arial,sans-serif" } },
-  { display: "Rippling",        style: { fontSize: 20, fontWeight: 700, fontFamily: "Arial,sans-serif" } },
+  { display: "React",        style: { fontSize: 22, fontWeight: 700, fontFamily: "Arial,sans-serif" } },
+  { display: "TypeScript",   style: { fontSize: 19, fontWeight: 700, fontFamily: "Arial,sans-serif" } },
+  { display: "Node.js",      style: { fontSize: 21, fontWeight: 700, fontFamily: "Arial,sans-serif" } },
+  { display: "Express",      style: { fontSize: 21, fontWeight: 600, fontFamily: "Arial,sans-serif" } },
+  { display: "Vite",         style: { fontSize: 22, fontWeight: 700, fontFamily: "Arial,sans-serif" } },
+  { display: "Python",       style: { fontSize: 21, fontWeight: 700, fontFamily: "Arial,sans-serif" } },
+  { display: "scikit-learn", style: { fontSize: 16, fontWeight: 700, fontFamily: "Arial,sans-serif" } },
+  { display: "pandas",       style: { fontSize: 20, fontWeight: 700, fontFamily: "Arial,sans-serif" } },
+  { display: "Recharts",     style: { fontSize: 19, fontWeight: 700, fontFamily: "Arial,sans-serif" } },
+  { display: "TanStack Query", style: { fontSize: 15, fontWeight: 700, fontFamily: "Arial,sans-serif" } },
+  { display: "Claude API",   style: { fontSize: 18, fontWeight: 700, fontFamily: "Arial,sans-serif" } },
+  { display: "GitHub",       style: { fontSize: 20, fontWeight: 700, fontFamily: "Arial,sans-serif" } },
 ];
 
 const FEATURES = [
@@ -46,13 +34,10 @@ const STATS = [
   { val: "< 1s",  label: "Prediction Speed",      color: "#22c55e" },
 ];
 
-const TESTIMONIALS = [
-  { quote: "ChurnGuard reduced our churn by 28% in Q1. The AI insights were immediately actionable — it caught customers 2 months before cancel that we would have completely missed.", name: "Sarah Chen",      role: "VP Customer Success, TeleCorp",   avatar: "SC", color: "#6366f1" },
-  { quote: "We've saved over $2M in ARR. The risk engine combined with AI advisor gave our team superpowers. And the fact that it's completely free is still mind-blowing to me.", name: "Marcus Williams", role: "Head of Retention, StreamLine",   avatar: "MW", color: "#8b5cf6" },
-  { quote: "I've evaluated Mixpanel, Amplitude, and Gainsight. ChurnGuard's AI advisor thinks like a senior consultant, not a generic tool. It's the best retention platform I've used.", name: "Priya Patel",   role: "Chief Data Officer, NexaFlow",    avatar: "PP", color: "#3b82f6" },
-  { quote: "Our team went from reactive to proactive in one week. ChurnGuard's dashboard is the first thing every retention manager opens every morning.", name: "James Liu",        role: "CEO, RetainCo",                   avatar: "JL", color: "#22c55e" },
-  { quote: "The open API let us embed ChurnGuard's risk scores directly into Salesforce. Setup took 2 hours. The ROI was instant.", name: "Elena Kowalski",   role: "Engineering Lead, DataFlow",      avatar: "EK", color: "#f59e0b" },
-  { quote: "We replaced a $40,000/year enterprise contract with ChurnGuard. Same insights, better AI, zero cost. This is the future of SaaS tooling.", name: "David Park",       role: "COO, ScaleUp Labs",               avatar: "DP", color: "#a78bfa" },
+const VALUES = [
+  { icon: "🎯", title: "Built to be genuinely useful", desc: "Every feature exists because a churn dashboard should help someone make a real decision — not just look good in a screenshot.", color: "#6366f1" },
+  { icon: "🔓", title: "Free means free", desc: "No trial period, no feature paywall, no 'contact sales.' The full dashboard, the API, and the ML model are yours to use and modify.", color: "#8b5cf6" },
+  { icon: "🌱", title: "Built solo, in the open", desc: "This is one developer's project, shipped publicly. The roadmap below is real, and it updates as work actually gets done.", color: "#3b82f6" },
 ];
 
 const ROADMAP_DATA = [
@@ -119,10 +104,10 @@ const FUTURE_CARDS = [
 ];
 
 const IMPACT = [
-  { val: "500+",  label: "Teams on waitlist",          color: "#6366f1" },
-  { val: "$2M+",  label: "ARR recovered (beta users)", color: "#22c55e" },
-  { val: "28%",   label: "Avg churn reduction",        color: "#8b5cf6" },
-  { val: "2 wks", label: "Avg time to first insight",  color: "#3b82f6" },
+  { val: "1",    label: "Solo developer",     color: "#6366f1" },
+  { val: "8",    label: "REST API endpoints", color: "#22c55e" },
+  { val: "100%", label: "Open source",        color: "#8b5cf6" },
+  { val: "$0",   label: "Cost, forever",      color: "#3b82f6" },
 ];
 
 const B = "#1e2d45";
@@ -197,7 +182,7 @@ export default function Landing({ onEnter }: { onEnter: () => void }) {
         </h1>
 
         <p style={{ fontSize: 19, color: "#475569", maxWidth: 580, lineHeight: 1.8, margin: "0 0 48px" }}>
-          The enterprise churn intelligence platform used by the world's best data teams. Real-time analytics, ML risk scoring, and Claude AI recommendations — completely free, forever.
+          An open-source churn intelligence platform, built solo. Real-time analytics, ML risk scoring, and an optional Claude AI advisor — completely free, forever.
         </p>
 
         <div style={{ display: "flex", gap: 14, flexWrap: "wrap", justifyContent: "center", marginBottom: 22 }}>
@@ -231,7 +216,7 @@ export default function Landing({ onEnter }: { onEnter: () => void }) {
         <div style={{ textAlign: "center", marginBottom: 52 }}>
           <div style={{ display: "flex", alignItems: "center", gap: 20, justifyContent: "center" }}>
             <div style={{ flex: 1, maxWidth: 200, height: 1, background: `linear-gradient(90deg,transparent,${B})` }} />
-            <span style={{ fontSize: 11, color: "#334155", textTransform: "uppercase", letterSpacing: "0.14em", fontWeight: 700, whiteSpace: "nowrap" }}>USED BY TEAMS AT THE WORLD'S BEST COMPANIES</span>
+            <span style={{ fontSize: 11, color: "#334155", textTransform: "uppercase", letterSpacing: "0.14em", fontWeight: 700, whiteSpace: "nowrap" }}>BUILT WITH</span>
             <div style={{ flex: 1, maxWidth: 200, height: 1, background: `linear-gradient(90deg,${B},transparent)` }} />
           </div>
         </div>
@@ -346,31 +331,25 @@ export default function Landing({ onEnter }: { onEnter: () => void }) {
         </div>
       </div>
 
-      {/* ── TESTIMONIALS ── */}
+      {/* ── WHY THIS EXISTS ── */}
       <div style={{ borderTop: `1px solid ${B}`, padding: "110px 48px" }}>
         <div style={{ maxWidth: 1200, margin: "0 auto" }}>
           <div style={{ textAlign: "center", marginBottom: 64 }}>
-            <div style={{ fontSize: 11, color: "#6366f1", textTransform: "uppercase", letterSpacing: "0.14em", fontWeight: 700, marginBottom: 16 }}>What People Say</div>
+            <div style={{ fontSize: 11, color: "#6366f1", textTransform: "uppercase", letterSpacing: "0.14em", fontWeight: 700, marginBottom: 16 }}>Why This Exists</div>
             <h2 style={{ fontSize: "clamp(28px,4vw,48px)", fontWeight: 900, margin: 0, letterSpacing: "-0.025em" }}>
-              Loved by retention teams.<br />
-              <span style={{ background: "linear-gradient(135deg,#818cf8,#a78bfa)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>Costs absolutely nothing.</span>
+              Built to be useful.<br />
+              <span style={{ background: "linear-gradient(135deg,#818cf8,#a78bfa)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>Not to impress a room.</span>
             </h2>
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 20 }}>
-            {TESTIMONIALS.map((t, i) => (
-              <div key={i} style={{ background: C2, border: `1px solid ${B}`, borderRadius: 20, padding: 30, position: "relative", overflow: "hidden", transition: "border-color 0.2s, transform 0.2s" }}
-                onMouseEnter={e => { (e.currentTarget as any).style.borderColor = t.color + "55"; (e.currentTarget as any).style.transform = "translateY(-4px)"; }}
+            {VALUES.map((v, i) => (
+              <div key={i} style={{ background: C2, border: `1px solid ${B}`, borderRadius: 20, padding: 32, position: "relative", overflow: "hidden", transition: "border-color 0.2s, transform 0.2s" }}
+                onMouseEnter={e => { (e.currentTarget as any).style.borderColor = v.color + "55"; (e.currentTarget as any).style.transform = "translateY(-4px)"; }}
                 onMouseLeave={e => { (e.currentTarget as any).style.borderColor = B; (e.currentTarget as any).style.transform = "translateY(0)"; }}>
-                <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: 2, background: `linear-gradient(90deg,${t.color},transparent)` }} />
-                <div style={{ fontSize: 40, color: t.color, lineHeight: 1, marginBottom: 16, fontFamily: "Georgia,serif" }}>"</div>
-                <p style={{ color: "#94a3b8", fontSize: 14, lineHeight: 1.8, margin: "0 0 24px" }}>{t.quote}</p>
-                <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-                  <div style={{ width: 40, height: 40, borderRadius: "50%", background: `linear-gradient(135deg,${t.color},${t.color}88)`, display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 800, fontSize: 12, color: "white", flexShrink: 0 }}>{t.avatar}</div>
-                  <div>
-                    <div style={{ fontWeight: 700, fontSize: 13, color: "#e2e8f0" }}>{t.name}</div>
-                    <div style={{ color: "#334155", fontSize: 12, marginTop: 1 }}>{t.role}</div>
-                  </div>
-                </div>
+                <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: 2, background: `linear-gradient(90deg,${v.color},transparent)` }} />
+                <div style={{ fontSize: 30, marginBottom: 16 }}>{v.icon}</div>
+                <div style={{ fontWeight: 700, fontSize: 16, marginBottom: 10, color: "#e2e8f0" }}>{v.title}</div>
+                <p style={{ color: "#94a3b8", fontSize: 14, lineHeight: 1.8, margin: 0 }}>{v.desc}</p>
               </div>
             ))}
           </div>
